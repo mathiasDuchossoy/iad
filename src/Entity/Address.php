@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
@@ -15,27 +16,31 @@ class Address
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Groups({"read", "write"})
      */
-    private $number;
+    private ?string $number;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
-    private $street;
+    private ?string $street;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
-    private $city;
+    private ?string $city;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read", "write"})
      */
-    private $zipCode;
+    private ?int $zipCode;
 
     public function getId(): ?int
     {

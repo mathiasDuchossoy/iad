@@ -2,27 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\HousingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *     collectionOperations={
- *         "get"={
- *              "openapi_context" = {
- *                  "parameters" = {
- *                      {
- *                          "name" = "prospect",
- *                          "in" = "query",
- *                          "required" = true,
- *                          "type" : "integer"
- *                      }
- *                  }
- *               }
- *          }
- *     }
- * )
  * @ORM\Entity(repositoryClass=HousingRepository::class)
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
@@ -35,19 +19,20 @@ abstract class Housing
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read", "write"})
      */
-    private $address;
+    protected ?Address $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Prospect::class, inversedBy="housing")
+     * @ORM\ManyToOne(targetEntity=Prospect::class, inversedBy="housings")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $prospect;
+    private ?Prospect $prospect;
 
     public function getId(): ?int
     {

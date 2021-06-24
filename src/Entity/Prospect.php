@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass=ProspectRepository::class)
  */
@@ -17,37 +18,37 @@ class Prospect
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $mail;
+    private ?string $mail;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstname;
+    private ?string $firstname;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $address;
+    private ?Address $address;
 
     /**
      * @ORM\OneToMany(targetEntity=Housing::class, mappedBy="prospect", orphanRemoval=true)
      */
-    private $housing;
+    private Collection $housings;
 
     public function __construct()
     {
-        $this->housing = new ArrayCollection();
+        $this->housings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,13 +109,13 @@ class Prospect
      */
     public function getHousing(): Collection
     {
-        return $this->housing;
+        return $this->housings;
     }
 
     public function addHousing(Housing $housing): self
     {
-        if (!$this->housing->contains($housing)) {
-            $this->housing[] = $housing;
+        if (!$this->housings->contains($housing)) {
+            $this->housings[] = $housing;
             $housing->setProspect($this);
         }
 
@@ -123,7 +124,7 @@ class Prospect
 
     public function removeHousing(Housing $housing): self
     {
-        if ($this->housing->removeElement($housing)) {
+        if ($this->housings->removeElement($housing)) {
             // set the owning side to null (unless already changed)
             if ($housing->getProspect() === $this) {
                 $housing->setProspect(null);
