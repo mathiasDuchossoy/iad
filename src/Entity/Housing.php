@@ -2,10 +2,27 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\HousingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get"={
+ *              "openapi_context" = {
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "prospect",
+ *                          "in" = "query",
+ *                          "required" = true,
+ *                          "type" : "integer"
+ *                      }
+ *                  }
+ *               }
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=HousingRepository::class)
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
