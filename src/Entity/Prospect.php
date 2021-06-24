@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProspectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,16 @@ class Prospect
      * @ORM\JoinColumn(nullable=false)
      */
     private $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Housing::class, mappedBy="prospect", orphanRemoval=true)
+     */
+    private $housing;
+
+    public function __construct()
+    {
+        $this->housing = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +99,36 @@ class Prospect
     public function setAddress(Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Housing[]
+     */
+    public function getHousing(): Collection
+    {
+        return $this->housing;
+    }
+
+    public function addHousing(Housing $housing): self
+    {
+        if (!$this->housing->contains($housing)) {
+            $this->housing[] = $housing;
+            $housing->setProspect($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHousing(Housing $housing): self
+    {
+        if ($this->housing->removeElement($housing)) {
+            // set the owning side to null (unless already changed)
+            if ($housing->getProspect() === $this) {
+                $housing->setProspect(null);
+            }
+        }
 
         return $this;
     }

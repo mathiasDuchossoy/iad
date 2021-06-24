@@ -26,6 +26,12 @@ abstract class Housing
      */
     private $address;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Prospect::class, inversedBy="housing")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $prospect;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -39,6 +45,18 @@ abstract class Housing
     public function setAddress(Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getProspect(): ?Prospect
+    {
+        return $this->prospect;
+    }
+
+    public function setProspect(?Prospect $prospect): self
+    {
+        $this->prospect = $prospect;
 
         return $this;
     }
